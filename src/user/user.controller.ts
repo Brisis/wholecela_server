@@ -16,16 +16,16 @@ export class UserController {
         return this.userService.findAll(role);
     }
 
-    @Get(':id')
-    findOne(@Param("id") id: string, @Query('role') role?: "customer" | "seller" | "admin") {
-        return this.userService.findOne(id, role);
-    }
-    
     @UseGuards(JwtGuard)
     @Get("authenticate")
     getLoggedUser(@GetUser() user: User) {        
         //return this.userService.findOne(user.id);
         return user;
+    }
+
+    @Get(':id')
+    findOne(@Param("id") id: string, @Query('role') role?: "customer" | "seller" | "admin") {
+        return this.userService.findOne(id, role);
     }
 
     @UseGuards(JwtGuard)

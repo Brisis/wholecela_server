@@ -25,11 +25,11 @@ let UserController = class UserController {
     findAll(role) {
         return this.userService.findAll(role);
     }
-    findOne(id, role) {
-        return this.userService.findOne(id, role);
-    }
     getLoggedUser(user) {
         return user;
+    }
+    findOne(id, role) {
+        return this.userService.findOne(id, role);
     }
     update(id, updateUserDto) {
         return this.userService.update(id, updateUserDto);
@@ -44,14 +44,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)('role')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "findOne", null);
-__decorate([
     (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Get)("authenticate"),
     __param(0, (0, decorator_1.GetUser)()),
@@ -59,6 +51,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "getLoggedUser", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)('role')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "findOne", null);
 __decorate([
     (0, common_1.UseGuards)(guard_1.JwtGuard),
     (0, common_1.Patch)(":id/update"),

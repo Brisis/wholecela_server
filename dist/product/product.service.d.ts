@@ -29,8 +29,8 @@ export declare class ProductService {
     })[]>;
     findOne(id: string): Promise<{
         id: string;
-        title: string;
         imageUrl: string;
+        title: string;
         description: string;
         quantity: number;
         price: number;
@@ -39,8 +39,8 @@ export declare class ProductService {
         warranty: boolean;
         categoryId: string;
         colors: {
-            id: string;
             name: string;
+            id: string;
             hexCode: string;
         }[];
     }>;
