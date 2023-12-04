@@ -1,0 +1,200 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Location {
+  id String @id @default(uuid())
+  name String @unique
+  city String
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  users User[]
+
+  @@map("locations")
+}
+
+model User {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String?
+  phone String?
+  imageUrl String?
+  email String @unique
+  role String
+  hashedPassword String
+
+  locationId String? 
+  location Location? @relation(fields: [locationId], references: [id])
+
+  street String?
+  latlng String?
+  
+  carts Cart[] 
+  orders Order[] 
+  sessions  Session[] 
+  products Product[]
+
+  @@map("users")
+}
+
+model Session {
+  id String  @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  active Boolean @default(true)
+  userAgent String?
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model ResetPasswordToken {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+
+  token String @unique
+  userId String
+  isValid Boolean @default(true)
+
+  @@map("reset_password_tokens")
+}
+
+model Category {
+  id String @id @default(uuid())
+  name String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Color {
+  id String @id @default(uuid())
+  name String @unique
+  hexCode String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+
+  @@map("colors")
+}
+
+model Product {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title String
+  imageUrl String?
+  description String?
+  quantity Int
+  price Float
+  authenticity Boolean @default(true)
+  returnPolicy Boolean @default(true)
+  warranty Boolean @default(true)
+
+  ownerId String
+  owner User @relation(fields: [ownerId], references: [id])
+
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id])
+
+  cartItem CartItem?
+  orderItem OrderItem?
+  
+  colors Color[]
+  
+  @@map("products")
+}
+
+
+model Cart {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cartItems CartItem[] 
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("carts")
+}
+
+model CartItem {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  quantity Int
+
+  cartId String 
+  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  productId String @unique
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("cart_items")
+}
+
+model Order {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status Status
+  totalPrice Float
+
+  orderItems OrderItem[]
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("orders")
+}
+
+enum Status {
+  PENDING
+  CANCELED
+  COMPLETED
+}
+
+model OrderItem {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  
+  quantity Int
+
+  orderId String
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String @unique
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
