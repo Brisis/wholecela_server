@@ -83,6 +83,21 @@ let ProductService = class ProductService {
         });
         return updatedProduct;
     }
+    async uploadImage(id, imageUrl) {
+        const product = await this.findOne(id);
+        if (!product) {
+            throw new common_1.NotFoundException;
+        }
+        const updatedProduct = await this.prisma.product.update({
+            where: {
+                id
+            },
+            data: {
+                imageUrl: imageUrl
+            }
+        });
+        return updatedProduct;
+    }
     async delete(id) {
         const product = await this.findOne(id);
         if (!product) {

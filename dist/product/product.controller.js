@@ -19,6 +19,8 @@ const product_service_1 = require("./product.service");
 const dto_1 = require("./dto");
 const update_product_dto_1 = require("./dto/update-product.dto");
 const multer_options_1 = require("./validators/multer-options");
+const sharp = require("sharp");
+const path_1 = require("path");
 let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
@@ -32,9 +34,15 @@ let ProductController = class ProductController {
     create(createProductDto) {
         return this.productService.create(createProductDto);
     }
-    async uploadImage(file) {
-        console.log(file);
-        return file;
+    async uploadImage(id, file) {
+        const filename = file.filename;
+        const filePath = (0, path_1.join)(__dirname, '../../uploads', filename);
+        const targetPath = (0, path_1.join)(__dirname, '../../uploads/thumbnails', filename);
+        await sharp(filePath.toString())
+            .resize(200)
+            .webp({ effort: 3 })
+            .toFile(targetPath.toString());
+        return this.productService.uploadImage(id, filename);
     }
     update(id, updateProductDto) {
         return this.productService.update(id, updateProductDto);
@@ -67,9 +75,10 @@ __decorate([
 __decorate([
     (0, common_1.Post)(":id/upload-image"),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', multer_options_1.multerOptions)),
-    __param(0, (0, common_1.UploadedFile)()),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "uploadImage", null);
 __decorate([

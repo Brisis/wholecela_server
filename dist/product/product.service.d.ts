@@ -74,6 +74,21 @@ export declare class ProductService {
         ownerId: string;
         categoryId: string;
     }>;
+    uploadImage(id: string, imageUrl: string): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        imageUrl: string;
+        description: string;
+        quantity: number;
+        price: number;
+        authenticity: boolean;
+        returnPolicy: boolean;
+        warranty: boolean;
+        ownerId: string;
+        categoryId: string;
+    }>;
     delete(id: string): Promise<{
         id: string;
         createdAt: Date;

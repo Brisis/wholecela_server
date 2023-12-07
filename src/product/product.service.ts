@@ -84,6 +84,25 @@ export class ProductService {
         return updatedProduct;
     }
 
+    async uploadImage(id: string, imageUrl: string) {
+        const product = await this.findOne(id)
+
+        if (!product) {
+            throw new NotFoundException
+        }
+      
+        const updatedProduct = await this.prisma.product.update({
+            where: {
+                id
+            },
+            data: {
+                imageUrl: imageUrl
+            }
+        })
+
+        return updatedProduct;
+    }
+
     async delete(id: string) {
         const product = await this.findOne(id)
 

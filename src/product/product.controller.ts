@@ -4,6 +4,8 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { multerOptions } from './validators/multer-options';
+import * as sharp from 'sharp';
+import { join } from "path"
 
 @Controller('products')
 export class ProductController {
@@ -26,9 +28,17 @@ export class ProductController {
 
     @Post(":id/upload-image")
     @UseInterceptors(FileInterceptor('file', multerOptions))
-    async uploadImage(@UploadedFile() file: Express.Multer.File) {
-        console.log(file);
-        return file
+    async uploadImage(@Param("id") id: string, @UploadedFile() file: Express.Multer.File) {
+        const filename = file.filename;
+        const filePath = join(__dirname, '../../uploads', filename);
+        const targetPath = join(__dirname, '../../uploads/thumbnails', filename);
+        
+        await sharp(filePath.toString())
+            .resize(200)
+            .webp({ effort: 3 })
+            .toFile(targetPath.toString());
+
+        return this.productService.uploadImage(id, filename);   
     }
 
     @Patch(":id")
