@@ -5,8 +5,8 @@ export declare class LocationController {
     private locationService;
     constructor(locationService: LocationService);
     findAll(): Promise<{
-        name: string;
         id: string;
+        name: string;
         city: string;
     }[]>;
     findOne(id: string): Promise<{

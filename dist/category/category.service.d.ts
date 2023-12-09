@@ -5,8 +5,8 @@ export declare class CategoryService {
     private prisma;
     constructor(prisma: PrismaService);
     findAll(): Promise<{
-        name: string;
         id: string;
+        name: string;
     }[]>;
     findOne(id: string): Promise<{
         id: string;
