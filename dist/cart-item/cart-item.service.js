@@ -34,6 +34,26 @@ let CartItemService = class CartItemService {
             }
         });
     }
+    async findAllCartItems(cartId) {
+        return this.prisma.cartItem.findMany({
+            where: {
+                cartId: cartId
+            },
+            select: {
+                id: true,
+                quantity: true,
+                cartId: true,
+                product: {
+                    select: {
+                        id: true,
+                        title: true,
+                        price: true,
+                        imageUrl: true,
+                    }
+                }
+            }
+        });
+    }
     async findOne(id) {
         const cartItem = await this.prisma.cartItem.findUnique({
             where: {

@@ -24,6 +24,9 @@ let CartItemController = class CartItemController {
     findAll() {
         return this.cartItemService.findAll();
     }
+    findAllCartItems(id) {
+        return this.cartItemService.findAllCartItems(id);
+    }
     findOne(id) {
         return this.cartItemService.findOne(id);
     }
@@ -44,6 +47,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], CartItemController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)("cart/:id"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], CartItemController.prototype, "findAllCartItems", null);
 __decorate([
     (0, common_1.Get)(":id"),
     __param(0, (0, common_1.Param)("id")),

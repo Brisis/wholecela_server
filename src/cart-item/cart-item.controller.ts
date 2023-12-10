@@ -12,6 +12,11 @@ export class CartItemController {
         return this.cartItemService.findAll()
     }
 
+    @Get("cart/:id")
+    findAllCartItems(@Param("id") id: string) {
+        return this.cartItemService.findAllCartItems(id)
+    }
+
     @Get(":id")
     findOne(@Param("id") id: string) {
         return this.cartItemService.findOne(id)

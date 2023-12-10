@@ -5,8 +5,8 @@ export declare class ColorController {
     private colorService;
     constructor(colorService: ColorService);
     findAll(): Promise<{
-        id: string;
         name: string;
+        id: string;
         hexCode: string;
     }[]>;
     findOne(id: string): Promise<{

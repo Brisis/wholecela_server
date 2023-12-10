@@ -26,6 +26,27 @@ export class CartItemService {
         })
     }
 
+    async findAllCartItems(cartId: string) {
+        return this.prisma.cartItem.findMany({
+            where: {
+                cartId: cartId
+            },
+            select: {
+                id: true,
+                quantity: true,
+                cartId: true,
+                product: {
+                    select: {
+                        id: true,
+                        title: true,
+                        price: true,
+                        imageUrl: true,
+                    }
+                }
+            }
+        })
+    }
+
     async findOne(id: string) {
         const cartItem = await this.prisma.cartItem.findUnique({
             where: {

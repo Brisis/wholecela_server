@@ -39,8 +39,8 @@ export declare class ProductService {
         warranty: boolean;
         categoryId: string;
         colors: {
-            id: string;
             name: string;
+            id: string;
             hexCode: string;
         }[];
     }>;

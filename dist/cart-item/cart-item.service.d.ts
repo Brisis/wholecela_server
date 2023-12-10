@@ -5,26 +5,37 @@ export declare class CartItemService {
     private prisma;
     constructor(prisma: PrismaService);
     findAll(): Promise<{
+        product: {
+            id: string;
+            imageUrl: string;
+            title: string;
+            price: number;
+        };
         id: string;
         quantity: number;
         cartId: string;
+    }[]>;
+    findAllCartItems(cartId: string): Promise<{
         product: {
             id: string;
-            title: string;
             imageUrl: string;
+            title: string;
             price: number;
         };
+        id: string;
+        quantity: number;
+        cartId: string;
     }[]>;
     findOne(id: string): Promise<{
+        product: {
+            id: string;
+            imageUrl: string;
+            title: string;
+            price: number;
+        };
         id: string;
         quantity: number;
         cartId: string;
-        product: {
-            id: string;
-            title: string;
-            imageUrl: string;
-            price: number;
-        };
     }>;
     create(createCartItemDto: CreateCartItemDto): Promise<{
         id: string;

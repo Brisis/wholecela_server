@@ -4,6 +4,22 @@ export declare class CartService {
     private prisma;
     constructor(prisma: PrismaService);
     findAll(): Promise<any[]>;
+    findAllUserCarts(userId: string): Promise<any[]>;
+    findUserCartBySeller(userId: string, sellerId: string): Promise<{
+        seller: {
+            name: string;
+            imageUrl: string;
+        };
+        id: string;
+        userId: string;
+        sellerId: string;
+        cartItems: {
+            id: string;
+            quantity: number;
+            cartId: string;
+            productId: string;
+        }[];
+    }>;
     findOne(id: string): Promise<{
         id: string;
         userId: string;

@@ -9,6 +9,7 @@ export class CartService {
     constructor(private prisma: PrismaService){}
 
     async findAll() {
+
         const carts = await this.prisma.cart.findMany({ 
             select: {
                 id: true,
@@ -50,6 +51,136 @@ export class CartService {
 
 
         return cartsWithSellers
+    }
+
+    async findAllUserCarts(userId: string) {
+
+        const carts = await this.prisma.cart.findMany({ 
+            where: {
+                userId: userId
+            },
+            select: {
+                id: true,
+                userId: true,
+                sellerId: true,
+                cartItems: {
+                    select: {
+                        id: true,
+                        quantity: true,
+                        cartId: true,
+                        productId: true
+                    }
+                }
+            }
+        });
+
+        var cartsWithSellers = []
+
+        for (let i = 0; i < carts.length; i++) {
+            const cart = carts[i];
+
+            const seller = await this.prisma.user.findUnique({
+                where: {
+                    id: cart.sellerId
+                },
+                select: {
+                    name: true,
+                    imageUrl: true
+                }
+            });
+
+            const newCart = {
+                ...cart,
+                seller
+            }
+
+            cartsWithSellers.push(newCart);
+        }
+
+
+        return cartsWithSellers
+    }
+
+    async findUserCartBySeller(userId: string, sellerId: string) {
+
+        const existsCart =  await this.prisma.cart.findFirst({ 
+            where: {
+                userId: userId,
+                sellerId: sellerId
+            },
+        })
+
+        if (existsCart) {
+            const cart = await this.prisma.cart.findUnique({ 
+                where: {
+                    id: existsCart.id,
+                },
+                select: {
+                    id: true,
+                    userId: true,
+                    sellerId: true,
+                    cartItems: {
+                        select: {
+                            id: true,
+                            quantity: true,
+                            cartId: true,
+                            productId: true
+                        }
+                    }
+                }
+            });
+
+            const seller = await this.prisma.user.findUnique({
+                where: {
+                    id: sellerId
+                },
+                select: {
+                    name: true,
+                    imageUrl: true
+                }
+            });
+    
+            return {
+                ...cart,
+                seller
+            }
+        }
+        
+        var newCart = await this.create({userId, sellerId} as CreateCartDto)
+
+        const cart = await this.prisma.cart.findUnique({ 
+            where: {
+                id: newCart.id,
+            },
+            select: {
+                id: true,
+                userId: true,
+                sellerId: true,
+                cartItems: {
+                    select: {
+                        id: true,
+                        quantity: true,
+                        cartId: true,
+                        productId: true
+                    }
+                }
+            }
+        });
+
+        const seller = await this.prisma.user.findUnique({
+            where: {
+                id: sellerId
+            },
+            select: {
+                name: true,
+                imageUrl: true
+            }
+        });
+
+        return {
+            ...cart,
+            seller
+        }
     }
 
     async findOne(id: string) {

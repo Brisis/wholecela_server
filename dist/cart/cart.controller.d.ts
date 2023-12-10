@@ -4,6 +4,22 @@ export declare class CartController {
     private cartSevice;
     constructor(cartSevice: CartService);
     findAll(): Promise<any[]>;
+    findAllUserCarts(id: string): Promise<any[]>;
+    findUserCartBySeller(id: string, sellerId: string): Promise<{
+        seller: {
+            name: string;
+            imageUrl: string;
+        };
+        id: string;
+        userId: string;
+        sellerId: string;
+        cartItems: {
+            id: string;
+            quantity: number;
+            cartId: string;
+            productId: string;
+        }[];
+    }>;
     findOne(id: string): Promise<{
         id: string;
         userId: string;

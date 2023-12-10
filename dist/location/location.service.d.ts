@@ -5,8 +5,8 @@ export declare class LocationService {
     private prisma;
     constructor(prisma: PrismaService);
     findAll(): Promise<{
-        id: string;
         name: string;
+        id: string;
         city: string;
     }[]>;
     findOne(id: string): Promise<{
