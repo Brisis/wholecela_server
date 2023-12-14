@@ -20,7 +20,12 @@ export class CartService {
                         id: true,
                         quantity: true,
                         cartId: true,
-                        productId: true
+                        productId: true,
+                        product: {
+                            select: {
+                                price: true
+                            }
+                        }
                     }
                 }
             }
@@ -28,8 +33,13 @@ export class CartService {
 
         var cartsWithSellers = []
 
+        var total = 0;
         for (let i = 0; i < carts.length; i++) {
+            
             const cart = carts[i];
+            total = cart.cartItems.reduce((accumulator, currentValue) => {
+                return accumulator + (currentValue.quantity * currentValue.product.price)
+            }, 0)            
 
             const seller = await this.prisma.user.findUnique({
                 where: {
@@ -43,12 +53,14 @@ export class CartService {
 
             const newCart = {
                 ...cart,
+                total,
                 seller
             }
 
+            newCart.cartItems.filter((item) => delete item.product)
+
             cartsWithSellers.push(newCart);
         }
-
 
         return cartsWithSellers
     }
@@ -68,7 +80,12 @@ export class CartService {
                         id: true,
                         quantity: true,
                         cartId: true,
-                        productId: true
+                        productId: true,
+                        product: {
+                            select: {
+                                price: true
+                            }
+                        }
                     }
                 }
             }
@@ -76,8 +93,13 @@ export class CartService {
 
         var cartsWithSellers = []
 
+        var total = 0;
         for (let i = 0; i < carts.length; i++) {
             const cart = carts[i];
+
+            total = cart.cartItems.reduce((accumulator, currentValue) => {
+                return accumulator + (currentValue.quantity * currentValue.product.price)
+            }, 0)   
 
             const seller = await this.prisma.user.findUnique({
                 where: {
@@ -91,8 +113,11 @@ export class CartService {
 
             const newCart = {
                 ...cart,
+                total,
                 seller
             }
+
+            newCart.cartItems.filter((item) => delete item.product)
 
             cartsWithSellers.push(newCart);
         }
@@ -124,11 +149,20 @@ export class CartService {
                             id: true,
                             quantity: true,
                             cartId: true,
-                            productId: true
+                            productId: true,
+                            product: {
+                                select: {
+                                    price: true
+                                }
+                            }
                         }
                     }
                 }
             });
+
+            var total = cart.cartItems.reduce((accumulator, currentValue) => {
+                return accumulator + (currentValue.quantity * currentValue.product.price)
+            }, 0)   
 
             const seller = await this.prisma.user.findUnique({
                 where: {
@@ -139,48 +173,19 @@ export class CartService {
                     imageUrl: true
                 }
             });
-    
-            return {
+
+            const newCart =  {
                 ...cart,
+                total,
                 seller
             }
+
+            newCart.cartItems.filter((item) => delete item.product)
+    
+            return newCart
         }
         
-        var newCart = await this.create({userId, sellerId} as CreateCartDto)
-
-        const cart = await this.prisma.cart.findUnique({ 
-            where: {
-                id: newCart.id,
-            },
-            select: {
-                id: true,
-                userId: true,
-                sellerId: true,
-                cartItems: {
-                    select: {
-                        id: true,
-                        quantity: true,
-                        cartId: true,
-                        productId: true
-                    }
-                }
-            }
-        });
-
-        const seller = await this.prisma.user.findUnique({
-            where: {
-                id: sellerId
-            },
-            select: {
-                name: true,
-                imageUrl: true
-            }
-        });
-
-        return {
-            ...cart,
-            seller
-        }
+        throw new NotFoundException("Cart not registered")
     }
 
     async findOne(id: string) {
@@ -213,6 +218,17 @@ export class CartService {
         if (!cart) {
             throw new NotFoundException
         }
+
+        var total = cart.cartItems.reduce((accumulator, currentValue) => {
+            return accumulator + (currentValue.quantity * currentValue.product.price)
+        }, 0)  
+
+        const newCart =  {
+            ...cart,
+            total
+        }
+
+        newCart.cartItems.filter((item) => delete item.product)
 
         return cart
     }

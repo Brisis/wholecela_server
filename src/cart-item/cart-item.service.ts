@@ -77,9 +77,11 @@ export class CartItemService {
     async create(createCartItemDto: CreateCartItemDto) {
         try {
 
+            const cartId = createCartItemDto.cartId
+
             const existsCart = await this.prisma.cart.findFirst({
                 where: {
-                    id: createCartItemDto.cartId
+                    id: cartId
                 }
             })
 
@@ -90,24 +92,26 @@ export class CartItemService {
             const existsCartItem = await this.prisma.cartItem.findFirst({
                 where: {
                     productId: createCartItemDto.productId,
-                    cartId: createCartItemDto.cartId
+                    cartId: cartId
                 }
             })
 
             if (existsCartItem) {
-                throw new ForbiddenException("Cart Item already exists")
+                // throw new ForbiddenException("Cart Item already exists")
+                await this.update(existsCartItem.id, createCartItemDto);
+                return await this.findAllCartItems(cartId)
             }
 
-            const cartItem = await this.prisma.cartItem.create({
+            await this.prisma.cartItem.create({
                 data: createCartItemDto
             })
-    
-            return cartItem
-           
+
+            return await this.findAllCartItems(cartId)
+              
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code == "P2002") {
-                    throw new ForbiddenException("Cart Itemo already taken")
+                    throw new ForbiddenException("Cart Item already taken")
                 }
             }
 
@@ -119,7 +123,7 @@ export class CartItemService {
         const cartItem = await this.findOne(id)
 
         if (!cartItem) {
-            throw new NotFoundException
+            throw new NotFoundException("Cart Item Not Found")
         }
 
         if (updateCartItemDto.quantity < 1) {

@@ -80,9 +80,10 @@ let CartItemService = class CartItemService {
     }
     async create(createCartItemDto) {
         try {
+            const cartId = createCartItemDto.cartId;
             const existsCart = await this.prisma.cart.findFirst({
                 where: {
-                    id: createCartItemDto.cartId
+                    id: cartId
                 }
             });
             if (!existsCart) {
@@ -91,21 +92,22 @@ let CartItemService = class CartItemService {
             const existsCartItem = await this.prisma.cartItem.findFirst({
                 where: {
                     productId: createCartItemDto.productId,
-                    cartId: createCartItemDto.cartId
+                    cartId: cartId
                 }
             });
             if (existsCartItem) {
-                throw new common_1.ForbiddenException("Cart Item already exists");
+                await this.update(existsCartItem.id, createCartItemDto);
+                return await this.findAllCartItems(cartId);
             }
-            const cartItem = await this.prisma.cartItem.create({
+            await this.prisma.cartItem.create({
                 data: createCartItemDto
             });
-            return cartItem;
+            return await this.findAllCartItems(cartId);
         }
         catch (error) {
             if (error instanceof library_1.PrismaClientKnownRequestError) {
                 if (error.code == "P2002") {
-                    throw new common_1.ForbiddenException("Cart Itemo already taken");
+                    throw new common_1.ForbiddenException("Cart Item already taken");
                 }
             }
             throw error;
@@ -114,7 +116,7 @@ let CartItemService = class CartItemService {
     async update(id, updateCartItemDto) {
         const cartItem = await this.findOne(id);
         if (!cartItem) {
-            throw new common_1.NotFoundException;
+            throw new common_1.NotFoundException("Cart Item Not Found");
         }
         if (updateCartItemDto.quantity < 1) {
             throw new common_1.ForbiddenException("Quantity cannot be below 0");

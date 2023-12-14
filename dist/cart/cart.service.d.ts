@@ -6,9 +6,10 @@ export declare class CartService {
     findAll(): Promise<any[]>;
     findAllUserCarts(userId: string): Promise<any[]>;
     findUserCartBySeller(userId: string, sellerId: string): Promise<{
+        total: number;
         seller: {
-            name: string;
             imageUrl: string;
+            name: string;
         };
         id: string;
         userId: string;
@@ -18,6 +19,9 @@ export declare class CartService {
             quantity: number;
             cartId: string;
             productId: string;
+            product: {
+                price: number;
+            };
         }[];
     }>;
     findOne(id: string): Promise<{
@@ -30,8 +34,8 @@ export declare class CartService {
             cartId: string;
             product: {
                 id: string;
-                imageUrl: string;
                 title: string;
+                imageUrl: string;
                 price: number;
             };
         }[];

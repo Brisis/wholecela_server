@@ -28,14 +28,23 @@ let CartService = class CartService {
                         id: true,
                         quantity: true,
                         cartId: true,
-                        productId: true
+                        productId: true,
+                        product: {
+                            select: {
+                                price: true
+                            }
+                        }
                     }
                 }
             }
         });
         var cartsWithSellers = [];
+        var total = 0;
         for (let i = 0; i < carts.length; i++) {
             const cart = carts[i];
+            total = cart.cartItems.reduce((accumulator, currentValue) => {
+                return accumulator + (currentValue.quantity * currentValue.product.price);
+            }, 0);
             const seller = await this.prisma.user.findUnique({
                 where: {
                     id: cart.sellerId
@@ -47,8 +56,10 @@ let CartService = class CartService {
             });
             const newCart = {
                 ...cart,
+                total,
                 seller
             };
+            newCart.cartItems.filter((item) => delete item.product);
             cartsWithSellers.push(newCart);
         }
         return cartsWithSellers;
@@ -67,14 +78,23 @@ let CartService = class CartService {
                         id: true,
                         quantity: true,
                         cartId: true,
-                        productId: true
+                        productId: true,
+                        product: {
+                            select: {
+                                price: true
+                            }
+                        }
                     }
                 }
             }
         });
         var cartsWithSellers = [];
+        var total = 0;
         for (let i = 0; i < carts.length; i++) {
             const cart = carts[i];
+            total = cart.cartItems.reduce((accumulator, currentValue) => {
+                return accumulator + (currentValue.quantity * currentValue.product.price);
+            }, 0);
             const seller = await this.prisma.user.findUnique({
                 where: {
                     id: cart.sellerId
@@ -86,8 +106,10 @@ let CartService = class CartService {
             });
             const newCart = {
                 ...cart,
+                total,
                 seller
             };
+            newCart.cartItems.filter((item) => delete item.product);
             cartsWithSellers.push(newCart);
         }
         return cartsWithSellers;
@@ -113,11 +135,19 @@ let CartService = class CartService {
                             id: true,
                             quantity: true,
                             cartId: true,
-                            productId: true
+                            productId: true,
+                            product: {
+                                select: {
+                                    price: true
+                                }
+                            }
                         }
                     }
                 }
             });
+            var total = cart.cartItems.reduce((accumulator, currentValue) => {
+                return accumulator + (currentValue.quantity * currentValue.product.price);
+            }, 0);
             const seller = await this.prisma.user.findUnique({
                 where: {
                     id: sellerId
@@ -127,43 +157,15 @@ let CartService = class CartService {
                     imageUrl: true
                 }
             });
-            return {
+            const newCart = {
                 ...cart,
+                total,
                 seller
             };
+            newCart.cartItems.filter((item) => delete item.product);
+            return newCart;
         }
-        var newCart = await this.create({ userId, sellerId });
-        const cart = await this.prisma.cart.findUnique({
-            where: {
-                id: newCart.id,
-            },
-            select: {
-                id: true,
-                userId: true,
-                sellerId: true,
-                cartItems: {
-                    select: {
-                        id: true,
-                        quantity: true,
-                        cartId: true,
-                        productId: true
-                    }
-                }
-            }
-        });
-        const seller = await this.prisma.user.findUnique({
-            where: {
-                id: sellerId
-            },
-            select: {
-                name: true,
-                imageUrl: true
-            }
-        });
-        return {
-            ...cart,
-            seller
-        };
+        throw new common_1.NotFoundException("Cart not registered");
     }
     async findOne(id) {
         const cart = await this.prisma.cart.findUnique({
@@ -194,6 +196,14 @@ let CartService = class CartService {
         if (!cart) {
             throw new common_1.NotFoundException;
         }
+        var total = cart.cartItems.reduce((accumulator, currentValue) => {
+            return accumulator + (currentValue.quantity * currentValue.product.price);
+        }, 0);
+        const newCart = {
+            ...cart,
+            total
+        };
+        newCart.cartItems.filter((item) => delete item.product);
         return cart;
     }
     async create(createCartDto) {
