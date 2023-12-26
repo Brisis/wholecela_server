@@ -267,15 +267,18 @@ export class CartService {
 
     async delete(id: string) {
         const cart = await this.findOne(id)
+        const userId = cart.userId
 
         if (!cart) {
             throw new NotFoundException
         }
 
-        return await this.prisma.cart.delete({
+        const deletedCart = await this.prisma.cart.delete({
             where: {
                 id
             }
         })
+
+        return await this.findAllUserCarts(userId)
     }
 }

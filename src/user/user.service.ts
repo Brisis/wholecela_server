@@ -176,6 +176,25 @@ export class UserService {
         return updatedUser;
     }
 
+    async uploadImage(id: string, imageUrl: string) {
+        const user = await this.findOne(id)
+
+        if (!user) {
+            throw new NotFoundException
+        }
+      
+        const updatedUser = await this.prisma.user.update({
+            where: {
+                id
+            },
+            data: {
+                imageUrl: imageUrl
+            }
+        })
+
+        return updatedUser;
+    }
+
     async delete(id: string) {
         const user = await this.findOne(id)
 

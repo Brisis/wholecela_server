@@ -233,14 +233,16 @@ let CartService = class CartService {
     }
     async delete(id) {
         const cart = await this.findOne(id);
+        const userId = cart.userId;
         if (!cart) {
             throw new common_1.NotFoundException;
         }
-        return await this.prisma.cart.delete({
+        const deletedCart = await this.prisma.cart.delete({
             where: {
                 id
             }
         });
+        return await this.findAllUserCarts(userId);
     }
 };
 exports.CartService = CartService;

@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 import { User } from '@prisma/client';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -34,6 +35,20 @@ export declare class UserController {
         latlng: string;
     }>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        phone: string;
+        imageUrl: string;
+        email: string;
+        role: string;
+        hashedPassword: string;
+        locationId: string;
+        street: string;
+        latlng: string;
+    }>;
+    uploadImage(id: string, file: Express.Multer.File): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;

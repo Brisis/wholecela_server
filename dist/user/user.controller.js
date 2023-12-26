@@ -18,6 +18,10 @@ const decorator_1 = require("../auth/decorator");
 const guard_1 = require("../auth/guard");
 const user_service_1 = require("./user.service");
 const update_user_dto_1 = require("./dto/update-user.dto");
+const platform_express_1 = require("@nestjs/platform-express");
+const sharp = require("sharp");
+const path_1 = require("path");
+const multer_options_1 = require("../product/validators/multer-options");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -33,6 +37,16 @@ let UserController = class UserController {
     }
     update(id, updateUserDto) {
         return this.userService.update(id, updateUserDto);
+    }
+    async uploadImage(id, file) {
+        const filename = file.filename;
+        const filePath = (0, path_1.join)(__dirname, '../../uploads', filename);
+        const targetPath = (0, path_1.join)(__dirname, '../../uploads/thumbnails', filename);
+        await sharp(filePath.toString())
+            .resize(200)
+            .webp({ effort: 3 })
+            .toFile(targetPath.toString());
+        return this.userService.uploadImage(id, filename);
     }
 };
 exports.UserController = UserController;
@@ -68,6 +82,16 @@ __decorate([
     __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "update", null);
+__decorate([
+    (0, common_1.UseGuards)(guard_1.JwtGuard),
+    (0, common_1.Post)(":id/upload-image"),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', multer_options_1.multerOptions)),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "uploadImage", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [user_service_1.UserService])

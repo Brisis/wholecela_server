@@ -30,8 +30,8 @@ export declare class ProductController {
     })[]>;
     findOne(id: string): Promise<{
         id: string;
-        imageUrl: string;
         title: string;
+        imageUrl: string;
         description: string;
         quantity: number;
         price: number;
@@ -40,8 +40,8 @@ export declare class ProductController {
         warranty: boolean;
         categoryId: string;
         colors: {
-            name: string;
             id: string;
+            name: string;
             hexCode: string;
         }[];
     }>;

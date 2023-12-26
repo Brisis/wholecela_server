@@ -156,6 +156,21 @@ let UserService = class UserService {
         });
         return updatedUser;
     }
+    async uploadImage(id, imageUrl) {
+        const user = await this.findOne(id);
+        if (!user) {
+            throw new common_1.NotFoundException;
+        }
+        const updatedUser = await this.prisma.user.update({
+            where: {
+                id
+            },
+            data: {
+                imageUrl: imageUrl
+            }
+        });
+        return updatedUser;
+    }
     async delete(id) {
         const user = await this.findOne(id);
         if (!user) {

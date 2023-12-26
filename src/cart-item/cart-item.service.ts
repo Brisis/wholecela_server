@@ -127,7 +127,8 @@ export class CartItemService {
         }
 
         if (updateCartItemDto.quantity < 1) {
-            throw new ForbiddenException("Quantity cannot be below 0")
+            return await this.delete(id);
+            //throw new ForbiddenException("Quantity cannot be below 0")
         }
       
         const updatedcartItem = await this.prisma.cartItem.update({
@@ -142,15 +143,18 @@ export class CartItemService {
 
     async delete(id: string) {
         const cartItem = await this.findOne(id)
+        const cartId = cartItem.cartId
 
         if (!cartItem) {
             throw new NotFoundException
         }
 
-        return await this.prisma.cartItem.delete({
+        const deletedCartItem = await this.prisma.cartItem.delete({
             where: {
                 id
             }
         })
+
+        return await this.findAllCartItems(cartId)
     }
 }

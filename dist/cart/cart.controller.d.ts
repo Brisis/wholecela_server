@@ -8,37 +8,37 @@ export declare class CartController {
     findUserCartBySeller(id: string, sellerId: string): Promise<{
         total: number;
         seller: {
-            imageUrl: string;
             name: string;
+            imageUrl: string;
         };
         id: string;
-        userId: string;
-        sellerId: string;
         cartItems: {
+            product: {
+                price: number;
+            };
             id: string;
             quantity: number;
             cartId: string;
             productId: string;
-            product: {
-                price: number;
-            };
         }[];
+        userId: string;
+        sellerId: string;
     }>;
     findOne(id: string): Promise<{
         id: string;
-        userId: string;
-        sellerId: string;
         cartItems: {
+            product: {
+                id: string;
+                imageUrl: string;
+                title: string;
+                price: number;
+            };
             id: string;
             quantity: number;
             cartId: string;
-            product: {
-                id: string;
-                title: string;
-                imageUrl: string;
-                price: number;
-            };
         }[];
+        userId: string;
+        sellerId: string;
     }>;
     create(createCartDto: CreateCartDto): Promise<{
         id: string;
@@ -47,11 +47,5 @@ export declare class CartController {
         userId: string;
         sellerId: string;
     }>;
-    delete(id: string): Promise<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        userId: string;
-        sellerId: string;
-    }>;
+    delete(id: string): Promise<any[]>;
 }

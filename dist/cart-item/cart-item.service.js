@@ -119,7 +119,7 @@ let CartItemService = class CartItemService {
             throw new common_1.NotFoundException("Cart Item Not Found");
         }
         if (updateCartItemDto.quantity < 1) {
-            throw new common_1.ForbiddenException("Quantity cannot be below 0");
+            return await this.delete(id);
         }
         const updatedcartItem = await this.prisma.cartItem.update({
             where: {
@@ -131,14 +131,16 @@ let CartItemService = class CartItemService {
     }
     async delete(id) {
         const cartItem = await this.findOne(id);
+        const cartId = cartItem.cartId;
         if (!cartItem) {
             throw new common_1.NotFoundException;
         }
-        return await this.prisma.cartItem.delete({
+        const deletedCartItem = await this.prisma.cartItem.delete({
             where: {
                 id
             }
         });
+        return await this.findAllCartItems(cartId);
     }
 };
 exports.CartItemService = CartItemService;

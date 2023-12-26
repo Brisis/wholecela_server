@@ -32,6 +32,20 @@ export declare class UserService {
         street: string;
         latlng: string;
     }>;
+    uploadImage(id: string, imageUrl: string): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        phone: string;
+        imageUrl: string;
+        email: string;
+        role: string;
+        hashedPassword: string;
+        locationId: string;
+        street: string;
+        latlng: string;
+    }>;
     delete(id: string): Promise<{
         id: string;
         createdAt: Date;
