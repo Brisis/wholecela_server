@@ -29,8 +29,8 @@ export declare class ProductService {
     })[]>;
     findOne(id: string): Promise<{
         id: string;
-        imageUrl: string;
         title: string;
+        imageUrl: string;
         description: string;
         quantity: number;
         price: number;
@@ -39,8 +39,8 @@ export declare class ProductService {
         warranty: boolean;
         categoryId: string;
         colors: {
-            name: string;
             id: string;
+            name: string;
             hexCode: string;
         }[];
     }>;
@@ -61,8 +61,6 @@ export declare class ProductService {
     }>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         imageUrl: string;
         description: string;
@@ -71,13 +69,32 @@ export declare class ProductService {
         authenticity: boolean;
         returnPolicy: boolean;
         warranty: boolean;
-        ownerId: string;
         categoryId: string;
+        colors: {
+            id: string;
+            name: string;
+            hexCode: string;
+        }[];
+    }>;
+    updateColors(id: string, colors: string[]): Promise<{
+        id: string;
+        title: string;
+        imageUrl: string;
+        description: string;
+        quantity: number;
+        price: number;
+        authenticity: boolean;
+        returnPolicy: boolean;
+        warranty: boolean;
+        categoryId: string;
+        colors: {
+            id: string;
+            name: string;
+            hexCode: string;
+        }[];
     }>;
     uploadImage(id: string, imageUrl: string): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         imageUrl: string;
         description: string;
@@ -86,8 +103,12 @@ export declare class ProductService {
         authenticity: boolean;
         returnPolicy: boolean;
         warranty: boolean;
-        ownerId: string;
         categoryId: string;
+        colors: {
+            id: string;
+            name: string;
+            hexCode: string;
+        }[];
     }>;
     delete(id: string): Promise<{
         id: string;

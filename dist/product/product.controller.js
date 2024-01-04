@@ -34,6 +34,9 @@ let ProductController = class ProductController {
     create(createProductDto) {
         return this.productService.create(createProductDto);
     }
+    updateColors(id, colors) {
+        return this.productService.updateColors(id, colors);
+    }
     async uploadImage(id, file) {
         const filename = file.filename;
         const filePath = (0, path_1.join)(__dirname, '../../uploads', filename);
@@ -72,6 +75,14 @@ __decorate([
     __metadata("design:paramtypes", [dto_1.CreateProductDto]),
     __metadata("design:returntype", void 0)
 ], ProductController.prototype, "create", null);
+__decorate([
+    (0, common_1.Patch)(":id/update-colors"),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Array]),
+    __metadata("design:returntype", void 0)
+], ProductController.prototype, "updateColors", null);
 __decorate([
     (0, common_1.Post)(":id/upload-image"),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', multer_options_1.multerOptions)),

@@ -60,10 +60,8 @@ export declare class ProductController {
         ownerId: string;
         categoryId: string;
     }>;
-    uploadImage(id: string, file: Express.Multer.File): Promise<{
+    updateColors(id: string, colors: string[]): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         imageUrl: string;
         description: string;
@@ -72,13 +70,32 @@ export declare class ProductController {
         authenticity: boolean;
         returnPolicy: boolean;
         warranty: boolean;
-        ownerId: string;
         categoryId: string;
+        colors: {
+            id: string;
+            name: string;
+            hexCode: string;
+        }[];
+    }>;
+    uploadImage(id: string, file: Express.Multer.File): Promise<{
+        id: string;
+        title: string;
+        imageUrl: string;
+        description: string;
+        quantity: number;
+        price: number;
+        authenticity: boolean;
+        returnPolicy: boolean;
+        warranty: boolean;
+        categoryId: string;
+        colors: {
+            id: string;
+            name: string;
+            hexCode: string;
+        }[];
     }>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<{
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         imageUrl: string;
         description: string;
@@ -87,8 +104,12 @@ export declare class ProductController {
         authenticity: boolean;
         returnPolicy: boolean;
         warranty: boolean;
-        ownerId: string;
         categoryId: string;
+        colors: {
+            id: string;
+            name: string;
+            hexCode: string;
+        }[];
     }>;
     delete(id: string): Promise<{
         id: string;

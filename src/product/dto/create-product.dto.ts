@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmpty, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsEmpty, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateProductDto {
   @IsString()
@@ -36,4 +36,8 @@ export class CreateProductDto {
   @IsBoolean()
   @IsOptional()
   warranty: boolean
+
+  // @IsArray()
+  // @IsOptional()
+  // colors: []
 }

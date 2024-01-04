@@ -81,7 +81,58 @@ let ProductService = class ProductService {
             },
             data: updateProductDto
         });
-        return updatedProduct;
+        return await this.findOne(updatedProduct.id);
+    }
+    async updateColors(id, colors) {
+        const product = await this.findOne(id);
+        if (!product) {
+            throw new common_1.NotFoundException;
+        }
+        let productColors = [];
+        for (let index = 0; index < colors.length; index++) {
+            const color = await this.prisma.color.findUnique({
+                where: {
+                    id: colors[index]
+                }
+            });
+            if (!color) {
+                throw new common_1.NotFoundException;
+            }
+            productColors.push(color);
+        }
+        let sortedProductColors = [];
+        for (let index = 0; index < productColors.length; index++) {
+            const element = productColors[index];
+            const newEl = {
+                id: element.id,
+                name: element.name,
+                hexCode: element.hexCode,
+            };
+            sortedProductColors.push(newEl);
+        }
+        let oldProductColors = [];
+        for (let index = 0; index < product.colors.length; index++) {
+            const element = product.colors[index];
+            const newEl = {
+                id: element.id,
+                name: element.name,
+                hexCode: element.hexCode,
+            };
+            oldProductColors.push(newEl);
+        }
+        const diff = oldProductColors.filter((el) => !sortedProductColors.some((e) => e.id == el.id));
+        const updatedProduct = await this.prisma.product.update({
+            where: {
+                id: id
+            },
+            data: {
+                colors: {
+                    connect: productColors,
+                    disconnect: diff
+                }
+            }
+        });
+        return await this.findOne(updatedProduct.id);
     }
     async uploadImage(id, imageUrl) {
         const product = await this.findOne(id);
@@ -96,7 +147,7 @@ let ProductService = class ProductService {
                 imageUrl: imageUrl
             }
         });
-        return updatedProduct;
+        return await this.findOne(updatedProduct.id);
     }
     async delete(id) {
         const product = await this.findOne(id);

@@ -26,6 +26,11 @@ export class ProductController {
         return this.productService.create(createProductDto)
     }
 
+    @Patch(":id/update-colors")
+    updateColors(@Param("id") id: string, @Body() colors: string[]) {
+        return this.productService.updateColors(id, colors)
+    }
+
     @Post(":id/upload-image")
     @UseInterceptors(FileInterceptor('file', multerOptions))
     async uploadImage(@Param("id") id: string, @UploadedFile() file: Express.Multer.File) {
