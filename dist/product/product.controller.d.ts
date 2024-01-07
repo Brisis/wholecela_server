@@ -30,8 +30,8 @@ export declare class ProductController {
     })[]>;
     findOne(id: string): Promise<{
         id: string;
-        title: string;
         imageUrl: string;
+        title: string;
         description: string;
         quantity: number;
         price: number;
@@ -62,8 +62,8 @@ export declare class ProductController {
     }>;
     updateColors(id: string, colors: string[]): Promise<{
         id: string;
-        title: string;
         imageUrl: string;
+        title: string;
         description: string;
         quantity: number;
         price: number;
@@ -79,8 +79,8 @@ export declare class ProductController {
     }>;
     uploadImage(id: string, file: Express.Multer.File): Promise<{
         id: string;
-        title: string;
         imageUrl: string;
+        title: string;
         description: string;
         quantity: number;
         price: number;
@@ -96,8 +96,8 @@ export declare class ProductController {
     }>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<{
         id: string;
-        title: string;
         imageUrl: string;
+        title: string;
         description: string;
         quantity: number;
         price: number;

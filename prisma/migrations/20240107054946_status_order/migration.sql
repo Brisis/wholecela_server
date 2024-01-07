@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `orders` MODIFY `status` ENUM('CREATED', 'PENDING', 'CANCELED', 'COMPLETED') NOT NULL;

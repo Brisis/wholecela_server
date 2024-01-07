@@ -20,6 +20,8 @@ model Location {
   
   users User[]
 
+  orders Order[]
+
   @@map("locations")
 }
 
@@ -174,10 +176,14 @@ model Order {
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  locationId String
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
   @@map("orders")
 }
 
 enum Status {
+  CREATED
   PENDING
   CANCELED
   COMPLETED
@@ -187,7 +193,6 @@ model OrderItem {
   id String @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   
   quantity Int
 

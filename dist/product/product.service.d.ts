@@ -29,8 +29,8 @@ export declare class ProductService {
     })[]>;
     findOne(id: string): Promise<{
         id: string;
-        title: string;
         imageUrl: string;
+        title: string;
         description: string;
         quantity: number;
         price: number;
@@ -61,8 +61,8 @@ export declare class ProductService {
     }>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<{
         id: string;
-        title: string;
         imageUrl: string;
+        title: string;
         description: string;
         quantity: number;
         price: number;
@@ -78,8 +78,8 @@ export declare class ProductService {
     }>;
     updateColors(id: string, colors: string[]): Promise<{
         id: string;
-        title: string;
         imageUrl: string;
+        title: string;
         description: string;
         quantity: number;
         price: number;
@@ -95,8 +95,8 @@ export declare class ProductService {
     }>;
     uploadImage(id: string, imageUrl: string): Promise<{
         id: string;
-        title: string;
         imageUrl: string;
+        title: string;
         description: string;
         quantity: number;
         price: number;

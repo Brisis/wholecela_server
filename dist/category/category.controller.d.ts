@@ -5,8 +5,8 @@ export declare class CategoryController {
     private categoryService;
     constructor(categoryService: CategoryService);
     findAll(): Promise<{
-        name: string;
         id: string;
+        name: string;
     }[]>;
     findOne(id: string): Promise<{
         id: string;

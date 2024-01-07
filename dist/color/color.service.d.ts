@@ -5,8 +5,8 @@ export declare class ColorService {
     private prisma;
     constructor(prisma: PrismaService);
     findAll(): Promise<{
-        name: string;
         id: string;
+        name: string;
         hexCode: string;
     }[]>;
     findOne(id: string): Promise<{
